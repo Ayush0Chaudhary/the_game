@@ -6,6 +6,10 @@ const speedDown = 300;
 // static group for ground
 var ground = null; 
 
+// static group for castle
+var castle = null;
+
+
 class GameScene extends Phaser.Scene {
   constructor() {
     super("scene-game");
@@ -15,17 +19,21 @@ class GameScene extends Phaser.Scene {
   preload() {
     // load assets
     this.load.image(
-      "land1",
+      "land",
       "assets/map.png"
+    );
+    this.load.image(
+      "castle",
+      "assets/castle.png"
     );
   }
   create() {
-    // create game objects
-
-
+    // create game static objects
     ground = this.physics.add.staticGroup();
-    ground.create(0, 0, "land1").setOrigin(0, 0);
+    castle = this.physics.add.staticGroup();    
     
+    ground.create(0, 0, "land").setOrigin(0, 0);
+    castle.create(0, 0, "castle").setOrigin(0, 0);
   }
   // update() {
 
