@@ -26,7 +26,7 @@ class GameScene extends Phaser.Scene {
 const config = {
   typw: Phaser.canvas,
   width: 500,
-  height: 500,
+  height: 250,
   physics: {
     default: 'arcade',
     arcade: {
