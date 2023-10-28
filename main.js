@@ -27,7 +27,6 @@ const config = {
   typw: Phaser.canvas,
   width: 500,
   height: 500,
-  canvas: gameCanvas,
   physics: {
     default: 'arcade',
     arcade: {
