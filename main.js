@@ -18,13 +18,13 @@ class GameScene extends Phaser.Scene {
     // create game objects
     this.add.image(0, 0, 'land').setOrigin(0, 0)
   }
-  update() {
+  // update() {
 
-  }
+  // }
 }
 
 const config = {
-  typw: Phaser.WEBGL,
+  typw: Phaser.canvas,
   width: 500,
   height: 500,
   canvas: gameCanvas,
