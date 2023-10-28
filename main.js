@@ -1,5 +1,7 @@
 import './style.css'
-const Phaser =  require('phaser')
+// const Phaser =  require('phaser')
+import Phaser from 'phaser';
+
 
 const speedDown = 300
 
@@ -8,13 +10,21 @@ class GameScene extends Phaser.Scene {
     super("scene-game")
   }
 
-  preload() {}
-  create() {}
-  update() {}
+  preload() {
+    // load assets
+    this.load.image('land', 'assets/PNG/Default size/Tile/medievalTile_58.png')
+  }
+  create() {
+    // create game objects
+    this.add.image(0, 0, 'land').setOrigin(0, 0)
+  }
+  update() {
+
+  }
 }
 
 const config = {
-  typw: Phaser.AUTO,
+  typw: Phaser.WEBGL,
   width: 500,
   height: 500,
   canvas: gameCanvas,
