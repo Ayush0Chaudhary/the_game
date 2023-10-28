@@ -10,6 +10,9 @@ var trees = null;
 // static group for castle
 var castle = null;
 
+// static group for soldiers
+var soldiers = null;
+
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -43,6 +46,7 @@ class GameScene extends Phaser.Scene {
       "tree4",
       "assets/PNG/Default size/Environment/medievalEnvironment_04.png"
     );
+    this.load.image("soldier", "assets/Vector/dot.svg");
   }
   create() {
     // create game static objects
@@ -64,11 +68,51 @@ class GameScene extends Phaser.Scene {
         trees.create(x, y, treeName).setOrigin(0, 0);
     }
 
-    castle.create(0, 0, "castle").setOrigin(0, 0);
-  }
-  // update() {
+    castle.create(500, 500, "castle").setOrigin(0, 0);
 
-  // }
+    this.soldiers = this.physics.add.group({
+      key: 'soldier',
+      repeat: 40,
+      setXY: { x: 1100, y: 900, stepX: 50 } // Starting position and spacing of soldiers
+    });
+
+    // Set castle position
+    this.castlePosition = new Phaser.Math.Vector2(500, 500);
+    this.physics.add.collider(this.soldiers, this.trees, this.handleTreeCollision, null, this);
+    this.physics.add.collider(this.soldiers, this.castle);
+  }
+  handleTreeCollision(soldier, tree) {
+    const avoidanceDirection = new Phaser.Math.Vector2(soldier.x - tree.x, soldier.y - tree.y).normalize();
+    soldier.setData('avoidanceDirection', avoidanceDirection);
+    this.time.delayedCall(500, () => { // Avoid trees for 500ms
+      soldier.setData('avoidanceDirection', null);
+    }, [], this);
+    const overlapX = (soldier.width + tree.width) / 2 - Math.abs(soldier.x - tree.x);
+    const overlapY = (soldier.height + tree.height) / 2 - Math.abs(soldier.y - tree.y);
+
+    if (overlapX < overlapY) {
+      soldier.x += overlapX * Math.sign(soldier.x - tree.x);
+    } else {
+      soldier.y += overlapY * Math.sign(soldier.y - tree.y);
+    }
+  }
+  update() {
+    this.soldiers.children.iterate((soldier) => {
+      let direction;
+      const avoidanceDirection = soldier.getData('avoidanceDirection');
+      if (avoidanceDirection) {
+        direction = avoidanceDirection;
+      } else {
+        direction = this.castlePosition.clone().subtract(new Phaser.Math.Vector2(soldier.x, soldier.y)).normalize();
+      }
+
+      soldier.x += direction.x * 2;
+      soldier.y += direction.y * 2;
+
+      // Optional: Adjust rotation to face towards the direction of movement
+      soldier.rotation = Phaser.Math.Angle.Between(soldier.x, soldier.y, soldier.x + direction.x, soldier.y + direction.y);
+    });
+  }
 }
 
 const config = {
@@ -78,7 +122,7 @@ const config = {
   physics: {
     default: "arcade",
     arcade: {
-      gravity: { y: speedDown },
+      gravity: { y: 0 },
       debug: false,
     },
   },
