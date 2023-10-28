@@ -1,22 +1,31 @@
-import './style.css'
+import "./style.css";
 // const Phaser =  require('phaser')
-import Phaser from 'phaser';
+import Phaser from "phaser";
+const speedDown = 300;
 
-
-const speedDown = 300
+// static group for ground
+var ground = null; 
 
 class GameScene extends Phaser.Scene {
   constructor() {
-    super("scene-game")
+    super("scene-game");
   }
+
 
   preload() {
     // load assets
-    this.load.image('land', 'assets/PNG/Default size/Tile/medievalTile_58.png')
+    this.load.image(
+      "land1",
+      "assets/map.png"
+    );
   }
   create() {
     // create game objects
-    this.add.image(0, 0, 'land').setOrigin(0, 0)
+
+
+    ground = this.physics.add.staticGroup();
+    ground.create(0, 0, "land1").setOrigin(0, 0);
+    
   }
   // update() {
 
@@ -24,19 +33,17 @@ class GameScene extends Phaser.Scene {
 }
 
 const config = {
-  typw: Phaser.canvas,
-  width: 500,
-  height: 250,
+  typw: Phaser.AUTO,
+  width: 1280,
+  height: 960,
   physics: {
-    default: 'arcade',
+    default: "arcade",
     arcade: {
       gravity: { y: speedDown },
-      debug: true
-    }
+      debug: true,
+    },
   },
-  scene: [
-    GameScene
-  ]
-}
+  scene: [GameScene],
+};
 
-const game = new Phaser.Game(config)
+const game = new Phaser.Game(config);
