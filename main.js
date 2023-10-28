@@ -7,6 +7,10 @@ const speedDown = 300;
 var ground = null; 
 var trees = null; 
 
+// static group for castle
+var castle = null;
+
+
 class GameScene extends Phaser.Scene {
   constructor() {
     super("scene-game");
@@ -16,8 +20,12 @@ class GameScene extends Phaser.Scene {
   preload() {
     // load assets
     this.load.image(
-      "land1",
+      "land",
       "assets/map.png"
+    );
+    this.load.image(
+      "castle",
+      "assets/castle.png"
     );
     this.load.image(
       "tree1",
@@ -37,11 +45,11 @@ class GameScene extends Phaser.Scene {
     );
   }
   create() {
-    // create game objects
-
-
+    // create game static objects
     ground = this.physics.add.staticGroup();
-    ground.create(0, 0, "land1").setOrigin(0, 0);
+    castle = this.physics.add.staticGroup();    
+    
+    ground.create(0, 0, "land").setOrigin(0, 0);
     trees = this.physics.add.staticGroup(); // create a group for trees
 
     const numberOfTrees = 30; // change this to the number of trees you want
@@ -55,6 +63,8 @@ class GameScene extends Phaser.Scene {
         console.log(treeName);
         trees.create(x, y, treeName).setOrigin(0, 0);
     }
+
+    castle.create(0, 0, "castle").setOrigin(0, 0);
   }
   // update() {
 
@@ -69,7 +79,7 @@ const config = {
     default: "arcade",
     arcade: {
       gravity: { y: speedDown },
-      debug: true,
+      debug: false,
     },
   },
   scene: [GameScene],
