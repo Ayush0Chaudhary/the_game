@@ -1,4 +1,4 @@
-import "./style.css";
+// import "./style.css";
 // const Phaser =  require('phaser')
 import Phaser from "phaser";
 const speedDown = 300;
@@ -118,7 +118,7 @@ class GameScene extends Phaser.Scene {
 }
 
 const config = {
-  typw: Phaser.AUTO,
+  type: Phaser.AUTO,
   width: 1280,
   height: 960,
   physics: {
