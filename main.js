@@ -56,7 +56,7 @@ class GameScene extends Phaser.Scene {
     ground.create(0, 0, "land").setOrigin(0, 0);
     trees = this.physics.add.staticGroup(); // create a group for trees
 
-    const numberOfTrees = 30; // change this to the number of trees you want
+    const numberOfTrees = 1000; // change this to the number of trees you want
 
     for (let i = 0; i < numberOfTrees; i++) {
         const x = Phaser.Math.Between(0, 1280);
@@ -73,8 +73,10 @@ class GameScene extends Phaser.Scene {
     this.soldiers = this.physics.add.group({
       key: 'soldier',
       repeat: 40,
-      setXY: { x: 1100, y: 900, stepX: 50 } // Starting position and spacing of soldiers
-    });
+      setXY: { x: 1100, y: 900, stepX: 50 }, // Starting position and spacing of soldiers
+      setScale: { x: 0.5, y: 0.5 }, // Scale down the soldiers
+    }
+    );
 
     // Set castle position
     this.castlePosition = new Phaser.Math.Vector2(500, 500);
