@@ -51,10 +51,10 @@ class GameScene extends Phaser.Scene {
     ground = this.physics.add.staticGroup();
     castle = this.physics.add.staticGroup();    
     
-    ground.create(0, 0, "land").setOrigin(0, 0);
+    ground.create(640, 480, "land")
     trees = this.physics.add.staticGroup();
 
-    const numberOfTrees = 100;
+    const numberOfTrees = 100;;
 
     for (let i = 0; i < numberOfTrees; i++) {
         const x = Phaser.Math.Between(0, 1280);
@@ -62,11 +62,11 @@ class GameScene extends Phaser.Scene {
 
         const treeType = Phaser.Math.Between(1, 4); // Randomly select a tree type between 1 and 4
         const treeName = "tree" + treeType;
-        trees.create(x, y, treeName).setOrigin(0, 0);
+        trees.create(x, y, treeName);
     }
 
-    castle.create(500, 500, "castle").setOrigin(0, 0);
-
+    castle.create(500, 500, "castle");
+    
     soldiers = this.physics.add.group({
       key: 'soldier',
       repeat: 9,
@@ -74,7 +74,8 @@ class GameScene extends Phaser.Scene {
       setScale: { x: 0.3, y: 0.3 }, // Scale down the soldiers
     }
     );
-
+    // soldiers.setBounce(0.05);
+    // soldiers.setCollideWorldBounds(true);
     // Set castle position
     this.castlePosition = new Phaser.Math.Vector2(700, 700);
     this.physics.add.collider(soldiers, trees, this.handleTreeCollision, null, this);
@@ -83,7 +84,7 @@ class GameScene extends Phaser.Scene {
   handleTreeCollision(soldier, tree) {
     const avoidanceDirection = new Phaser.Math.Vector2(soldier.x - tree.x, soldier.y - tree.y).normalize();
     soldier.setData('avoidanceDirection', avoidanceDirection);
-    this.time.delayedCall(500, () => { // Avoid trees for 500ms
+    this.time.delayedCall(200, () => { // Avoid trees for 500ms
       soldier.setData('avoidanceDirection', null);
     }, [], this);
     const overlapX = (soldier.width + tree.width) / 2 - Math.abs(soldier.x - tree.x);
@@ -122,7 +123,7 @@ const config = {
     default: "arcade",
     arcade: {
       gravity: { y: 0 },
-      debug: false,
+      debug: true,
     },
   },
   scene: [GameScene],
