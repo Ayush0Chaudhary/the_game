@@ -9,8 +9,6 @@ var trees = null;
 
 // static group for castle
 var castle = null;
-
-// static group for soldiers
 var soldiers = null;
 
 
@@ -54,9 +52,9 @@ class GameScene extends Phaser.Scene {
     castle = this.physics.add.staticGroup();    
     
     ground.create(0, 0, "land").setOrigin(0, 0);
-    trees = this.physics.add.staticGroup(); // create a group for trees
+    trees = this.physics.add.staticGroup();
 
-    const numberOfTrees = 1000; // change this to the number of trees you want
+    const numberOfTrees = 100;
 
     for (let i = 0; i < numberOfTrees; i++) {
         const x = Phaser.Math.Between(0, 1280);
@@ -64,24 +62,23 @@ class GameScene extends Phaser.Scene {
 
         const treeType = Phaser.Math.Between(1, 4); // Randomly select a tree type between 1 and 4
         const treeName = "tree" + treeType;
-        console.log(treeName);
         trees.create(x, y, treeName).setOrigin(0, 0);
     }
 
     castle.create(500, 500, "castle").setOrigin(0, 0);
 
-    this.soldiers = this.physics.add.group({
+    soldiers = this.physics.add.group({
       key: 'soldier',
-      repeat: 40,
+      repeat: 9,
       setXY: { x: 1100, y: 900, stepX: 50 }, // Starting position and spacing of soldiers
-      setScale: { x: 0.5, y: 0.5 }, // Scale down the soldiers
+      setScale: { x: 0.3, y: 0.3 }, // Scale down the soldiers
     }
     );
 
     // Set castle position
-    this.castlePosition = new Phaser.Math.Vector2(500, 500);
-    this.physics.add.collider(this.soldiers, this.trees, this.handleTreeCollision, null, this);
-    this.physics.add.collider(this.soldiers, this.castle);
+    this.castlePosition = new Phaser.Math.Vector2(700, 700);
+    this.physics.add.collider(soldiers, trees, this.handleTreeCollision, null, this);
+    this.physics.add.collider(soldiers, castle);
   }
   handleTreeCollision(soldier, tree) {
     const avoidanceDirection = new Phaser.Math.Vector2(soldier.x - tree.x, soldier.y - tree.y).normalize();
@@ -99,7 +96,7 @@ class GameScene extends Phaser.Scene {
     }
   }
   update() {
-    this.soldiers.children.iterate((soldier) => {
+    soldiers.children.iterate((soldier) => {
       let direction;
       const avoidanceDirection = soldier.getData('avoidanceDirection');
       if (avoidanceDirection) {
